@@ -1095,6 +1095,12 @@ public class FileManagerFragment extends Fragment {
 
     private void showFileOptions(File file, View anchor) {
         PopupMenu popup = new PopupMenu(getContext(), anchor);
+        if (file.isDirectory()) {
+            popup.getMenu().add("Scan folder for games").setOnMenuItemClickListener(item -> {
+                performContainerAction(file, container -> scanFolderForGames(file, container));
+                return true;
+            });
+        }
         if (isExecutable(file)) {
             popup.getMenu().add("Run / Open").setOnMenuItemClickListener(item -> {
                 performContainerAction(file, container -> runFileDirectly(file, container));
@@ -1130,6 +1136,44 @@ public class FileManagerFragment extends Fragment {
             return true;
         });
         popup.show();
+    }
+
+    private boolean isSkippableExe(String n) {
+        String[] contains = {"unins", "vcredist", "vc_redist", "dxsetup", "dxwebsetup", "dotnet",
+                "crashreport", "crashhandler", "redist", "directx"};
+        String[] starts = {"setup", "install", "update", "patch", "config", "uninstall"};
+        for (String c : contains) if (n.contains(c)) return true;
+        for (String s : starts) if (n.startsWith(s)) return true;
+        return false;
+    }
+
+    private void collectGameExes(File dir, int depth, List<File> out) {
+        File[] children = dir.listFiles();
+        if (children == null) return;
+        File best = null;
+        for (File f : children) {
+            if (!f.isFile()) continue;
+            String n = f.getName().toLowerCase(Locale.ENGLISH);
+            if (!n.endsWith(".exe") || isSkippableExe(n)) continue;
+            if (best == null || f.length() > best.length()) best = f;
+        }
+        if (best != null) {
+            out.add(best);
+            return;
+        }
+        if (depth >= 3) return;
+        for (File f : children) if (f.isDirectory()) collectGameExes(f, depth + 1, out);
+    }
+
+    private void scanFolderForGames(File dir, Container container) {
+        List<File> exes = new ArrayList<>();
+        collectGameExes(dir, 0, exes);
+        if (exes.isEmpty()) {
+            Toast.makeText(getContext(), "No game .exe found in this folder", Toast.LENGTH_LONG).show();
+            return;
+        }
+        for (File exe : exes) createShortcutDirectly(exe, container);
+        Toast.makeText(getContext(), exes.size() + " game(s) added to Library", Toast.LENGTH_LONG).show();
     }
 
     private String getSmartDisplayName(File file) {

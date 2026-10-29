@@ -357,14 +357,23 @@ public class XServerDisplayActivity extends AppCompatActivity {
         drawerLayout.setOnApplyWindowInsetsListener(
                 (view, windowInsets) -> windowInsets.replaceSystemWindowInsets(0, 0, 0, 0));
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        final View emxgHandle = findViewById(R.id.EmxgMenuHandle);
+        if (emxgHandle != null) {
+            emxgHandle.setOnClickListener(v -> {
+                if (!drawerLayout.isDrawerOpen(GravityCompat.START))
+                    drawerLayout.openDrawer(GravityCompat.START);
+            });
+        }
         drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerOpened(View drawerView) {
+                if (emxgHandle != null) emxgHandle.setVisibility(View.GONE);
                 openSidebarPanel(activeSidebarItemId, activeSidebarPanelId);
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
+                if (emxgHandle != null) emxgHandle.setVisibility(View.VISIBLE);
                 hideAllSidebarPanels();
             }
         });

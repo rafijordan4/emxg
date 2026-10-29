@@ -11,6 +11,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <TextView
+        android:id="@+id/EmxgMenuHandle"
+        android:layout_width="72dp"
+        android:layout_height="26dp"
+        android:layout_gravity="top|center_horizontal"
+        android:alpha="0.7"
+        android:background="@drawable/emxg_handle_bg"
+        android:contentDescription="Menu"
+        android:gravity="center"
+        android:text="&#183;&#183;&#183;"
+        android:textColor="#FFFFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
     <ScrollView
         android:id="@+id/SidebarScrollView"
         android:layout_width="320dp"

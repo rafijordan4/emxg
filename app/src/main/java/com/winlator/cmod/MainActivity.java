@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && (Build.VERSION.SDK_INT < 33 || ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED))
             createNotificationChannel();
 
-        boolean isBigPictureModeEnabled = sharedPreferences.getBoolean("enable_big_picture_mode", false);
+        boolean isBigPictureModeEnabled = sharedPreferences.getBoolean("enable_big_picture_mode", true);
 
         if (isBigPictureModeEnabled) {
             Intent intent = new Intent(MainActivity.this, BigPictureActivity.class);

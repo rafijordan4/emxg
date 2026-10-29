@@ -177,7 +177,7 @@ public class SettingsFragment extends Fragment {
 
         // Initialize Big Picture Mode Checkbox
         cbEnableBigPictureMode = view.findViewById(R.id.CBEnableBigPictureMode);
-        cbEnableBigPictureMode.setChecked(preferences.getBoolean("enable_big_picture_mode", false));
+        cbEnableBigPictureMode.setChecked(preferences.getBoolean("enable_big_picture_mode", true));
 
         initCustomApiKeySettings(view);
 
@@ -450,7 +450,7 @@ public class SettingsFragment extends Fragment {
                 soundFontChoices,
                 winlatorPath,
                 shortcutPath,
-                preferences.getBoolean("enable_big_picture_mode", false),
+                preferences.getBoolean("enable_big_picture_mode", true),
                 Math.round(preferences.getFloat("cursor_speed", 1.0f) * 100.0f),
                 preferences.getBoolean("cursor_lock", true),
                 preferences.getBoolean("xinput_toggle", false),
